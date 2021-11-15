@@ -4,21 +4,23 @@ include('inc/pdo.php');
 // Traitement PHP
 $errors = array();
 $success = false;
-if(!empty($_POST['submitted'])) {
-    $message = clean($_POST['message']);
-    // Validation
-    $errors = textValid($errors,$message,'message',5,2000);
-    if(count($errors) == 0) {
-        // insert avec protection des injections SQL
-        $sql = "INSERT INTO `messages-mise-en-production-cours` VALUES (null,:message,NOW())";
-        $query = $pdo->prepare($sql);
-        $query->bindValue(':message',$message,PDO::PARAM_STR);
-        $query->execute();
 
-        $success = true;
-    }
+if (!empty($_POST['submitted'])) {
+  $message = clean($_POST['message-vlauer']);
+  // Validation
+  $errors = textValid($errors, $message, 'message-vlauer', 1, 2000);
+  if (count($errors) == 0) {
+    // insert avec protection des injections SQL
+    $sql = "INSERT INTO `messages-mise-en-production-cours` VALUES (null,':message-vlauer',NOW())";
+    $query = $pdo->prepare($sql);
+    $query->bindValue(':message-vlauer', $message, PDO::PARAM_STR);
+    $query->execute();
+
+    $success = true;
+  }
 }
-include('inc/header.php');?>
+
+include('inc/header.php'); ?>
 <main>
   <div class="max-w-screen-md mx-auto p-5">
     <div class="text-center mb-16">
@@ -37,13 +39,13 @@ include('inc/header.php');?>
       </h3>
     </div>
 
-    <?php if($success) { ?>
-            <p class="success">Merci pour votre message.</p>
-        <?php } else  { ?>
-    <form class="w-full" action="" method="post">
-      <div class="flex flex-wrap -mx-3 mb-6">
-        <div class="w-full px-3">
-          <label class="
+    <?php if ($success) { ?>
+      <p class="success">Merci pour votre message.</p>
+    <?php } else { ?>
+      <form class="w-full" action="" method="post">
+        <div class="flex flex-wrap -mx-3 mb-6">
+          <div class="w-full px-3">
+            <label class="
                   block
                   uppercase
                   tracking-wide
@@ -51,9 +53,9 @@ include('inc/header.php');?>
                   font-bold
                   mb-2
                 " for="grid-password">
-            Votre message
-          </label>
-          <textarea name="message" rows="10" class="
+              Votre message
+            </label>
+            <textarea name="message-vlauer" rows="10" class="
                   appearance-none
                   block
                   w-full
@@ -66,12 +68,15 @@ include('inc/header.php');?>
                   mb-3
                   leading-tight
                   focus:outline-none focus:bg-white focus:border-gray-500
-                "><?php if(!empty($_POST['message'])) { echo $_POST['message']; } ?></textarea>
-                <p class="error"><?php if(!empty($errors['message'])) {echo $errors['message'];} ?></p>
-            
-        </div>
-        <div class="flex justify-between w-full px-3">
-          <input class="
+                "><?php if (!empty($_POST['message-vlauer'])) {
+                    echo $_POST['message-vlauer'];
+                  } ?></textarea>
+            <p class="error"><?php if (!empty($errors['message-vlauer'])) {
+                                echo $errors['message-vlauer'];
+                              } ?></p>
+          </div>
+          <div class="flex justify-between w-full px-3">
+            <input class="
                   shadow
                   bg-indigo-600
                   hover:bg-indigo-400
@@ -81,12 +86,11 @@ include('inc/header.php');?>
                   py-2
                   px-6
                   rounded
-                " type="submit" name="submitted">
-            Envoyer
-          </input>
+                " type="submit" name="submitted" id="submit">
+            </input>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
     <?php } ?>
   </div>
 
@@ -96,4 +100,4 @@ include('inc/header.php');?>
   </div>
 </main>
 <?php
-include('inc/footer.php');?>
+include('inc/footer.php'); ?>
