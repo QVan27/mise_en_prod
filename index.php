@@ -5,15 +5,20 @@ include('inc/pdo.php');
 $errors = array();
 $success = false;
 
+$sql = "SELECT * FROM `messages-mise-en-production-cours`";
+$query = $pdo->prepare($sql);
+$query->execute();
+$messages = $query->fetchAll();
+
 if (!empty($_POST['submitted'])) {
-  $message = clean($_POST['message-vlauer']);
+  $message = clean($_POST['message']);
   // Validation
-  $errors = textValid($errors, $message, 'message-vlauer', 1, 2000);
+  $errors = textValid($errors, $message, 'message', 5, 2000);
   if (count($errors) == 0) {
     // insert avec protection des injections SQL
-    $sql = "INSERT INTO `messages-mise-en-production-cours` VALUES (null,':message-vlauer',NOW())";
+    $sql = "INSERT INTO `messages-mise-en-production-cours`  (`message-vlauer`)  VALUES (:message)";
     $query = $pdo->prepare($sql);
-    $query->bindValue(':message-vlauer', $message, PDO::PARAM_STR);
+    $query->bindValue(':message', $message, PDO::PARAM_STR);
     $query->execute();
 
     $success = true;
@@ -55,7 +60,7 @@ include('inc/header.php'); ?>
                 " for="grid-password">
               Votre message
             </label>
-            <textarea name="message-vlauer" rows="10" class="
+            <textarea name="message" rows="10" class="
                   appearance-none
                   block
                   w-full
@@ -68,11 +73,11 @@ include('inc/header.php'); ?>
                   mb-3
                   leading-tight
                   focus:outline-none focus:bg-white focus:border-gray-500
-                "><?php if (!empty($_POST['message-vlauer'])) {
-                    echo $_POST['message-vlauer'];
+                "><?php if (!empty($_POST['message'])) {
+                    echo $_POST['message'];
                   } ?></textarea>
-            <p class="error"><?php if (!empty($errors['message-vlauer'])) {
-                                echo $errors['message-vlauer'];
+            <p class="error"><?php if (!empty($errors['message'])) {
+                                echo $errors['message'];
                               } ?></p>
           </div>
           <div class="flex justify-between w-full px-3">
@@ -95,8 +100,10 @@ include('inc/header.php'); ?>
   </div>
 
   <div class="max-w-screen-md mx-auto p-5">
-    <p class="bg-gray-100 w-3/4 mx-4 my-2 p-2 rounded-lg">message 1:</p>
-    <p class="bg-gray-300 w-3/4 mx-4 my-2 p-2 rounded-lg">le message ici</p>
+    <p class="bg-gray-300 w-3/4 mx-4 my-2 p-2 ">Liste des messages :</p>
+    <?php foreach ($messages as $value) {
+      echo `<p class="bg-gray-300 w-3/4 mx-4 my-2 p-2 rounded-lg">` . $value['message-vlauer'] . "</p>";
+    } ?>
   </div>
 </main>
 <?php
