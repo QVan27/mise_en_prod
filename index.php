@@ -101,7 +101,7 @@ include('inc/header.php');?>
       echo "<p>".$value['message-vlauer']."</p>";
 
 } ?>
-    <p class="bg-gray-300 w-3/4 mx-4 my-2 p-2 rounded-lg">le message ici</p>
+
   </div>
 </main>
 <?php
