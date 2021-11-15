@@ -22,6 +22,7 @@ if (!empty($_POST['submitted'])) {
     $query->execute();
 
     $success = true;
+    header("Refresh:0");
   }
 }
 
