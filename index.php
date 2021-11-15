@@ -1,6 +1,24 @@
 <?php
-include('inc/header.php');
-include('inc/pdo.php');?>
+include('inc/function.php');
+include('inc/pdo.php');
+// Traitement PHP
+$errors = array();
+$success = false;
+if(!empty($_POST['submitted'])) {
+    $message = clean($_POST['message']);
+    // Validation
+    $errors = textValid($errors,$message,'message',5,2000);
+    if(count($errors) == 0) {
+        // insert avec protection des injections SQL
+        $sql = "INSERT INTO `messages-mise-en-production-cours` VALUES (null,:message,NOW())";
+        $query = $pdo->prepare($sql);
+        $query->bindValue(':message',$message,PDO::PARAM_STR);
+        $query->execute();
+
+        $success = true;
+    }
+}
+include('inc/header.php');?>
 <main>
   <div class="max-w-screen-md mx-auto p-5">
     <div class="text-center mb-16">
@@ -19,7 +37,10 @@ include('inc/pdo.php');?>
       </h3>
     </div>
 
-    <form class="w-full">
+    <?php if($success) { ?>
+            <p class="success">Merci pour votre message.</p>
+        <?php } else  { ?>
+    <form class="w-full" action="" method="post">
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-3">
           <label class="
@@ -32,7 +53,7 @@ include('inc/pdo.php');?>
                 " for="grid-password">
             Votre message
           </label>
-          <textarea rows="10" class="
+          <textarea name="message" rows="10" class="
                   appearance-none
                   block
                   w-full
@@ -45,11 +66,12 @@ include('inc/pdo.php');?>
                   mb-3
                   leading-tight
                   focus:outline-none focus:bg-white focus:border-gray-500
-                ">
-              </textarea>
+                "><?php if(!empty($_POST['message'])) { echo $_POST['message']; } ?></textarea>
+                <p class="error"><?php if(!empty($errors['message'])) {echo $errors['message'];} ?></p>
+            
         </div>
         <div class="flex justify-between w-full px-3">
-          <button class="
+          <input class="
                   shadow
                   bg-indigo-600
                   hover:bg-indigo-400
@@ -59,12 +81,13 @@ include('inc/pdo.php');?>
                   py-2
                   px-6
                   rounded
-                " type="submit">
+                " type="submit" name="submitted">
             Envoyer
-          </button>
+          </input>
         </div>
       </div>
     </form>
+    <?php } ?>
   </div>
 
   <div class="max-w-screen-md mx-auto p-5">
