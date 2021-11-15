@@ -4,13 +4,19 @@ include('inc/pdo.php');
 // Traitement PHP
 $errors = array();
 $success = false;
+
+$sql = "SELECT * FROM `messages-mise-en-production-cours`";
+$query = $pdo->prepare($sql);
+$query->execute();
+$messages = $query->fetchAll();
+
 if(!empty($_POST['submitted'])) {
     $message = clean($_POST['message']);
     // Validation
     $errors = textValid($errors,$message,'message',5,2000);
     if(count($errors) == 0) {
         // insert avec protection des injections SQL
-        $sql = "INSERT INTO `messages-mise-en-production-cours` VALUES (null,:message,NOW())";
+        $sql = "INSERT INTO `messages-mise-en-production-cours`  (`message-vlauer`)  VALUES (:message)";
         $query = $pdo->prepare($sql);
         $query->bindValue(':message',$message,PDO::PARAM_STR);
         $query->execute();
@@ -91,7 +97,10 @@ include('inc/header.php');?>
   </div>
 
   <div class="max-w-screen-md mx-auto p-5">
-    <p class="bg-gray-100 w-3/4 mx-4 my-2 p-2 rounded-lg">message 1:</p>
+   <?php foreach ($messages as $value){
+      echo "<p>".$value['message-vlauer']."</p>";
+
+} ?>
     <p class="bg-gray-300 w-3/4 mx-4 my-2 p-2 rounded-lg">le message ici</p>
   </div>
 </main>
