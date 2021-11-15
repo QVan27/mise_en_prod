@@ -1,5 +1,6 @@
 <?php
-include('inc/header.php');?>
+include('inc/header.php');
+include('inc/pdo.php');?>
 <main>
   <div class="max-w-screen-md mx-auto p-5">
     <div class="text-center mb-16">
