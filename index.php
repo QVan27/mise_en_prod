@@ -1,4 +1,5 @@
 <?php
+
 include('inc/function.php');
 include('inc/pdo.php');
 // Traitement PHP
