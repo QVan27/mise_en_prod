@@ -14,30 +14,30 @@ function clean($string)
 }
 
 
-function textValid($err,$value,$key,$min,$max,$empty = true)
+function textValid($err, $value, $key, $min, $max, $empty = true)
 {
-    if(!empty($value)) {
-        if(mb_strlen($value) < $min) {
-            $err[$key] = 'Min '.$min.' caracteres';
+    if (!empty($value)) {
+        if (mb_strlen($value) < $min) {
+            $err[$key] = 'Min ' . $min . ' caracteres';
         } elseif (mb_strlen($value) > $max) {
-            $err[$key] = 'Max '.$max.' caracteres';
+            $err[$key] = 'Max ' . $max . ' caracteres';
         }
     } else {
-        if($empty) {
+        if ($empty) {
             $err[$key] = 'Veuillez renseigner ce champ';
         }
     }
     return $err;
 }
 
-function emailValidation($err,$mail,$key)
-{
-    if(!empty($mail)) {
-        if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-            $err[$key] = 'Email non valide';
-        }
-    } else {
-        $err[$key] = 'Veuillez renseigner ce champ';
-    }
-    return $err;
-}
+// function emailValidation($err, $mail, $key)
+// {
+//     if (!empty($mail)) {
+//         if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+//             $err[$key] = 'Email non valide';
+//         }
+//     } else {
+//         $err[$key] = 'Veuillez renseigner ce champ';
+//     }
+//     return $err;
+// }
